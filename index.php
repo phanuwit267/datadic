@@ -5,9 +5,9 @@ $configDb = [
     'type'     => 'mysql',
     'hostname' => '127.0.0.1',
     'port' => '3306',
-    'database' => 'egat-pm',
+    'database' => 'db',
     'username' => 'root',
-    'password' => '123456789',
+    'password' => '',
 ];
 
 try {

@@ -1,0 +1,20 @@
+{
+    "name": "phanuwit/datadic",
+    "description": "mysql",
+    "type": "project",
+    "keywords": [
+        "mysql"
+    ],
+    "license": "MIT",
+    "authors": [
+    {
+        "name": "phanuwit.h",
+        "email": "phanuwit.h@gmail.com"
+    }],
+    "require":
+    {
+        "php": ">=5.4.0",
+        "phpoffice/phpexcel": "^1.8"
+    },
+    "minimum-stability": "dev"
+}

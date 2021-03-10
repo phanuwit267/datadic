@@ -28,7 +28,7 @@ while ($row = $res->fetch()) {
     ]);
 }
 
-foreach ($tables as &$val) {
+foreach ($tables as $key => $val) {
     $res = $mysql->query("SHOW FULL FIELDS FROM `{$val['name']}`");
     $fields = [];
     while ($row = $res->fetch()) {
@@ -43,7 +43,7 @@ foreach ($tables as &$val) {
             'comment'   => $row['Comment'],
         ]);
     }
-    $val['field'] = $fields;
+    $tables[$key]['field'] = $fields;
 }
 
 function getKeyName($str)

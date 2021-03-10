@@ -76,9 +76,8 @@ $activeSheet->getColumnDimension('C')->setWidth(20);
 $activeSheet->getColumnDimension('D')->setWidth(24);
 $activeSheet->getColumnDimension('E')->setWidth(20);
 $activeSheet->getColumnDimension('F')->setWidth(12);
-$activeSheet->getColumnDimension('G')->setWidth(12);
-$activeSheet->getColumnDimension('H')->setWidth(18);
-$activeSheet->getColumnDimension('I')->setWidth(30);
+$activeSheet->getColumnDimension('G')->setWidth(18);
+$activeSheet->getColumnDimension('H')->setWidth(30);
 
 $activeSheet->getDefaultStyle()->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
 $activeSheet->getDefaultStyle()->getAlignment()->setVertical(PHPExcel_Style_Alignment::VERTICAL_CENTER);
@@ -106,7 +105,7 @@ $styleTitleArray = [
 $num = 1;
 foreach ($tables as $key => $val) {
     $activeSheet->setCellValue('B' . $num, 'Table ' . ($key + 1) . ' : ' . $val['name']);
-    $activeSheet->mergeCells('B' . $num . ':I' . $num);
+    $activeSheet->mergeCells('B' . $num . ':H' . $num);
     $activeSheet->getStyle('B' . $num)->applyFromArray($styleTitleArray);
     $num++;
 
@@ -114,25 +113,25 @@ foreach ($tables as $key => $val) {
     $activeSheet->setCellValue('B' . $num, 'No');
     $activeSheet->setCellValue('C' . $num, 'Column');
     $activeSheet->setCellValue('D' . $num, 'Data Type');
-    $activeSheet->setCellValue('F' . $num, 'Nullable');
-    $activeSheet->setCellValue('G' . $num, 'Key');
-    $activeSheet->setCellValue('H' . $num, 'Extra');
-    $activeSheet->setCellValue('I' . $num, 'Description');
-    $activeSheet->getStyle('B' . $num . ':I' . $num)->applyFromArray($styleTitleArray);
-    $activeSheet->getStyle('B' . $num . ':I' . $num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
-    $activeSheet->getStyle('B' . $num . ':I' . $num)->getFont()->setName('TH SarabunPSK')->setSize(16);
+    $activeSheet->setCellValue('E' . $num, 'Nullable');
+    $activeSheet->setCellValue('F' . $num, 'Key');
+    $activeSheet->setCellValue('G' . $num, 'Extra');
+    $activeSheet->setCellValue('H' . $num, 'Description');
+    $activeSheet->getStyle('B' . $num . ':H' . $num)->applyFromArray($styleTitleArray);
+    $activeSheet->getStyle('B' . $num . ':H' . $num)->getAlignment()->setHorizontal(PHPExcel_Style_Alignment::HORIZONTAL_CENTER);
+    $activeSheet->getStyle('B' . $num . ':H' . $num)->getFont()->setName('TH SarabunPSK')->setSize(16);
     $num++;
     foreach ($val['field'] as $k => $v) {
         $activeSheet->setCellValue('B' . $num, $k + 1);
         $activeSheet->setCellValue('C' . $num, $v['field']);
         $activeSheet->setCellValue('D' . $num, $v['type']);
-        $activeSheet->setCellValue('F' . $num, $v['null']);
-        $activeSheet->setCellValue('G' . $num, $v['key']);
-        $activeSheet->setCellValue('H' . $num, $v['extra']);
-        $activeSheet->setCellValue('I' . $num, $v['comment']);
+        $activeSheet->setCellValue('E' . $num, $v['null']);
+        $activeSheet->setCellValue('F' . $num, $v['key']);
+        $activeSheet->setCellValue('G' . $num, $v['extra']);
+        $activeSheet->setCellValue('H' . $num, $v['comment']);
         $num++;
     }
-    $activeSheet->getStyle('B' . $start . ':I' . ($num - 1))->applyFromArray($styleArray);
+    $activeSheet->getStyle('B' . $start . ':H' . ($num - 1))->applyFromArray($styleArray);
     $num++;
 }
 $write = new PHPExcel_Writer_Excel2007($excel);

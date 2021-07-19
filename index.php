@@ -28,22 +28,62 @@ while ($row = $res->fetch()) {
     ]);
 }
 
-foreach ($tables as $key => $val) {
+foreach ($tables as $index => $val) {
     $res = $mysql->query("SHOW FULL FIELDS FROM `{$val['name']}`");
+    $fks = getForeignKey($configDb['database'], $val['name']);
+
     $fields = [];
     while ($row = $res->fetch()) {
+
+        $key = getKeyName($row['Key']);
+        $key = in_array($row['Field'], $fks) ? "FK" : $key;
+
         array_push($fields, [
             'field'     => $row['Field'],
             'type'      => $row['Type'],
             'collation' => $row['Collation'],
             'null'      => $row['Null'],
-            'key'       => getKeyName($row['Key']),
+            'key'       => $key,
             'default'   => $row['Default'],
             'extra'     => $row['Extra'],
             'comment'   => $row['Comment'],
         ]);
     }
-    $tables[$key]['field'] = $fields;
+    $tables[$index]['field'] = $fields;
+}
+
+function getForeignKey($database, $table)
+{
+    $res = $GLOBALS['mysql']->query("
+        SELECT CONCAT(fks.constraint_schema, '.', fks.table_name) AS foreign_table,
+            '->' AS rel,
+            CONCAT(fks.unique_constraint_schema, '.', fks.referenced_table_name)
+                AS primary_table,
+            fks.constraint_name,
+            GROUP_CONCAT(kcu.column_name
+                ORDER BY position_in_unique_constraint SEPARATOR ', ')
+                AS fk_columns
+        FROM information_schema.referential_constraints fks
+        JOIN information_schema.key_column_usage kcu
+        ON fks.constraint_schema = kcu.table_schema
+        AND fks.table_name = kcu.table_name
+        AND fks.constraint_name = kcu.constraint_name
+        WHERE fks.constraint_schema = '{$database}' AND fks.table_name = '{$table}'
+        GROUP BY fks.constraint_schema,
+            fks.table_name,
+            fks.unique_constraint_schema,
+            fks.referenced_table_name,
+            fks.constraint_name
+        ORDER BY fks.constraint_schema,
+            fks.table_name;
+    ");
+
+    $fks = [];
+    while ($row = $res->fetch()) {
+        $fks[] = $row['fk_columns'];
+    }
+
+    return $fks;
 }
 
 function getKeyName($str)
@@ -52,9 +92,9 @@ function getKeyName($str)
         case "PRI":
             $key = "PK";
             break;
-        case "MUL":
-            $key = "FK";
-            break;
+        // case "MUL":
+        //     $key = "FK";
+        //     break;
         default:
             $key = "";
     }

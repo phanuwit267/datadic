@@ -11,7 +11,7 @@ $configDb = [
 ];
 
 try {
-    $mysql = new PDO("{$configDb['type']}:host={$configDb['hostname']};dbname={$configDb['database']}", $configDb['username'], $configDb['password']);
+    $mysql = new PDO("{$configDb['type']}:host={$configDb['hostname']};port={$configDb['port']};dbname={$configDb['database']}", $configDb['username'], $configDb['password']);
     $mysql->query("SET NAMES utf8mb4");
 } catch (PDOException $e) {
     exit('Failed to connect to database' . $e->getMessage());
